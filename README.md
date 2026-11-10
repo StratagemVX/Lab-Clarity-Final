@@ -1,47 +1,87 @@
 # Lab Clarity — Medical Diagnostic Biomarker & Lab Report Intelligence Platform
 
-> Intelligent medical lab report parsing, biomarker range evaluation, reference interval contextualization, and secure PDF export built with React 18, Vite, and containerized deployment.
+> An automated clinical laboratory report intelligence platform evaluating extracted physiological biomarkers against standard reference intervals with Docker containerization and PDF clinical export.
+
+[![React](https://img.shields.io/badge/React-18-61DAFB.svg)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg)](https://www.typescriptlang.org/)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-blue.svg)](https://www.docker.com/)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC.svg)](https://tailwindcss.com/)
 
 ---
 
-## 1. Project Title
-**Lab Clarity** (`Lab-Clarity-Final`) — Automated Clinical Laboratory Report & Biomarker Intelligence System.
+## Executive Overview
 
-## 2. Project Overview
-Lab Clarity is a specialized diagnostic analysis web application created to help patients and clinicians interpret complex blood panels and laboratory tests. By extracting clinical biomarkers, comparing values against established reference ranges, and categorizing metrics into physiological categories (Lipid, Metabolic, Complete Blood Count, Renal), it renders medical data intuitive and understandable.
+Lab Clarity (`Lab-Clarity-Final`) is a clinical laboratory diagnostic intelligence platform developed to translate complex blood work and pathology lab values into actionable, visual health metrics. By parsing physiological parameters, contextualizing extracted numbers against demographic reference intervals, and rendering categorized biomarker dashboards (Complete Blood Count, Lipid Panels, Metabolic Profiles, Renal Metrics), Lab Clarity empowers patients and clinicians to detect anomalies rapidly.
 
-## 3. Key Features
-- **Extracted Biomarker Analysis (`ExtractedValuesDisplay.tsx`):** Automated classification of test parameters against age- and gender-adjusted standard ranges.
-- **Visual Range Indicators:** Real-time color-coded indicators for Normal, Borderline, and Critical metrics.
-- **Direct PDF Clinical Export (`PDFExport.tsx`):** Download cleanly formatted diagnostic summaries for physician reviews.
-- **Full Dockerized Infrastructure:** Production-grade `Dockerfile` and multi-stage container optimization.
+---
 
-## 4. Technology Stack
-- **Frontend:** React 18, Vite, TypeScript, Tailwind CSS, Lucide React, shadcn/ui
-- **Containerization & CI:** Docker, Multi-stage builds, GitHub Actions
+## Core Capabilities & Features
 
-## 5. System Architecture
+### Implemented Features
+- **Automated Biomarker Range Evaluation (`ExtractedValuesDisplay.tsx`):** Compares patient lab values against standard clinical reference intervals, color-coding Low, Normal, Borderline, and Critical metrics.
+- **Categorized Physiological Panels (`CategorySelector.tsx`):** Automatically organizes tests into clinical categories: Hematology, Lipid Profile, Renal Function, Liver Panel, and Metabolic Markers.
+- **Clinical Summary PDF Export (`PDFExport.tsx`):** Generates clean, formatted diagnostic summary reports for physician consultations.
+- **Historical Comparison View (`ComparisonView.tsx`):** Visual progression tracking comparing previous lab values over time.
+- **Containerized Deployment Infrastructure:** Production `Dockerfile` and `.dockerignore` optimized for multi-stage container deployments.
+
+---
+
+## System Architecture
+
 ```mermaid
 flowchart LR
-    Report[Lab Report / User Values] --> Parser[Biomarker Extraction Engine]
-    Parser --> Norm[Unit Normalizer & Validator]
-    Norm --> RefEngine[Clinical Reference Range Engine]
-    RefEngine --> UI[Interactive Diagnostic Dashboard]
-    UI --> PDF[PDF Summary Exporter]
+    Report[Lab Report Values] --> Parser[Biomarker Extraction Engine]
+    Parser --> Validator[Unit Normalizer & Range Validator]
+    Validator --> Evaluator[Clinical Reference Range Engine]
+    Evaluator --> UI[Interactive Diagnostic Dashboard]
+    UI --> PDF[PDF Diagnostic Exporter]
 ```
 
-## 6. Installation & Docker Run
+---
+
+## Directory Structure
+
+```text
+Lab-Clarity-Final/
+├── src/
+│   ├── components/
+│   │   ├── CategorySelector.tsx     # Diagnostic panel selector
+│   │   ├── ComparisonView.tsx       # Historical biomarker comparison
+│   │   ├── DisclaimerBanner.tsx     # Clinical notice banner
+│   │   ├── ExtractedValuesDisplay.tsx # Biomarker indicator cards
+│   │   ├── ImageUploader.tsx        # Report image / document uploader
+│   │   ├── PDFExport.tsx            # Formatted PDF export generator
+│   │   └── ResultDisplay.tsx        # Diagnostic visual results shell
+│   ├── App.tsx                      # Main application view container
+│   └── main.tsx                     # React DOM mount point
+├── Dockerfile                       # Multi-stage production container build
+├── .dockerignore                    # Build optimization directives
+├── package.json                     # Dependencies and scripts
+└── README.md                        # Master repository technical documentation
+```
+
+---
+
+## Setup & Execution
+
+### Local Development
 ```bash
-# Local Development
 npm install
 npm run dev
+```
 
-# Docker Deployment
+### Docker Production Deployment
+```bash
 docker build -t lab-clarity .
 docker run -p 80:80 lab-clarity
 ```
 
-## 7. Author & Project Information
-- **Lead Developer:** Chethan Kumar B S (`StratagemVX`)
-- **Institution:** MVJ College of Engineering
-- **Focus:** HealthTech & Diagnostic Data Engineering
+---
+
+## Contributor Attribution & Profile
+
+- **Lead Engineer:** Chethan Kumar B S (`StratagemVX`)
+- **Institution:** Department of Computer Science & Engineering, MVJ College of Engineering
+- **GitHub:** [https://github.com/StratagemVX](https://github.com/StratagemVX)
+- **Portfolio:** [https://chethan-kumar-portfolio.vercel.app/](https://chethan-kumar-portfolio.vercel.app/)
+- **LinkedIn:** [https://linkedin.com/in/chethan-kumar-b-s-781a002bb](https://linkedin.com/in/chethan-kumar-b-s-781a002bb)
