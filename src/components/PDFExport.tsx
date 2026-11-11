@@ -112,7 +112,8 @@ const PDFExport = ({ test, value, className }: PDFExportProps) => {
     });
 
     // Interpretation
-    const finalY = (doc as any).lastAutoTable.finalY || 150;
+    type AutoTableDoc = jsPDF & { lastAutoTable?: { finalY?: number } };
+    const finalY = (doc as AutoTableDoc).lastAutoTable?.finalY ?? 150;
     
     doc.setFontSize(14);
     doc.setFont("helvetica", "bold");

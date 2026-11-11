@@ -24,7 +24,7 @@ const ExtractedValuesDisplay = ({ extractedText, onSelectValue }: ExtractedValue
     // Common patterns for lab values
     const patterns = [
       // Pattern: "Test Name: 12.5 mg/dL" or "Test Name 12.5 mg/dL"
-      /([A-Za-z\s\(\)]+)[:\s]+(\d+\.?\d*)\s*([a-zA-Z/%²³]+)?/g,
+      /([A-Za-z\s()]+)[:\s]+(\d+\.?\d*)\s*([a-zA-Z/%²³]+)?/g,
       // Pattern: "12.5 Test Name"
       /(\d+\.?\d*)\s+([A-Za-z\s]+)/g,
     ];
@@ -34,7 +34,7 @@ const ExtractedValuesDisplay = ({ extractedText, onSelectValue }: ExtractedValue
       if (!cleanLine) return;
 
       // Try to match patterns
-      const match1 = cleanLine.match(/([A-Za-z][A-Za-z\s\(\)]+)[:\s]+(\d+\.?\d*)\s*([a-zA-Z/%²³]*)/);
+      const match1 = cleanLine.match(/([A-Za-z][A-Za-z\s()]+)[:\s]+(\d+\.?\d*)\s*([a-zA-Z/%²³]*)/);
       
       if (match1) {
         const testName = match1[1].trim();
