@@ -1,9 +1,9 @@
-# Lab Clarity — Medical Diagnostic Biomarker & Lab Report Intelligence Platform
+# Lab Clarity (`Lab-Clarity-Final`) — Clinical Lab Report & Biomarker Intelligence UI
 
-> An automated clinical laboratory report intelligence platform evaluating extracted physiological biomarkers against standard reference intervals with Docker containerization and PDF clinical export.
+> Interactive web application for inspecting common medical lab parameters against reference intervals, organizing panels by clinical category, comparing results, and exporting PDF summaries, built with React 18, TypeScript, Vite, Tailwind CSS, and Docker.
 
 [![React](https://img.shields.io/badge/React-18-61DAFB.svg)](https://react.dev/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6.svg)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6.svg)](https://www.typescriptlang.org/)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-blue.svg)](https://www.docker.com/)
 [![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3.4-38B2AC.svg)](https://tailwindcss.com/)
 
@@ -11,98 +11,88 @@
 
 ## Executive Overview
 
-Lab Clarity (`Lab-Clarity-Final`) is a clinical laboratory diagnostic intelligence platform developed to translate complex blood work and pathology lab values into actionable, visual health metrics. By parsing physiological parameters, contextualizing extracted numbers against demographic reference intervals, and rendering categorized biomarker dashboards (Complete Blood Count, Lipid Panels, Metabolic Profiles, Renal Metrics), Lab Clarity empowers patients and clinicians to detect anomalies rapidly.
+**Lab Clarity** (`Lab-Clarity-Final`) helps users organize and review clinical biomarker results against structured reference datasets (`src/data/labTests.ts`). Users can browse test categories (`CategorySelector`), upload or inspect report values (`ImageUploader`, `ValueInput`, `ExtractedValuesDisplay`), compare trends (`ComparisonView`), track local history (`TestHistoryView`, `useTestHistory`), view educational explanations (`ResultDisplay`), and generate PDF reports (`PDFExport`) alongside an educational medical disclaimer (`DisclaimerBanner`).
+
+> **Quality & CI Status (`main` vs. Open Draft PR #2 — `maintenance/repository-quality-improvements`):**
+> - **PR #2** upgrades vulnerable npm dependencies in `package-lock.json`, resolves lint/TypeScript issues across components (`ExtractedValuesDisplay.tsx`, `PDFExport.tsx`, `useTestHistory.tsx`, `tailwind.config.ts`), fixes `Dockerfile` & `.gitignore`, adds `typecheck` & `test` scripts with `vitest` tests (`src/data/labTests.test.ts`), and adds `.github/workflows/quality.yml` (verified passing in CI).
 
 ---
 
-## Core Capabilities & Features
-
-### Implemented Features
-- **Automated Biomarker Range Evaluation (`ExtractedValuesDisplay.tsx`):** Compares patient lab values against standard clinical reference intervals, color-coding Low, Normal, Borderline, and Critical metrics.
-- **Categorized Physiological Panels (`CategorySelector.tsx`):** Automatically organizes tests into clinical categories: Hematology, Lipid Profile, Renal Function, Liver Panel, and Metabolic Markers.
-- **Clinical Summary PDF Export (`PDFExport.tsx`):** Generates clean, formatted diagnostic summary reports for physician consultations.
-- **Historical Comparison View (`ComparisonView.tsx`):** Visual progression tracking comparing previous lab values over time.
-- **Containerized Deployment Infrastructure:** Production `Dockerfile` and `.dockerignore` optimized for multi-stage container deployments.
-
----
-
-## System Architecture
+## System Flow & Directory Structure
 
 ```mermaid
 flowchart LR
-    Report[Lab Report Values] --> Parser[Biomarker Extraction Engine]
-    Parser --> Validator[Unit Normalizer & Range Validator]
-    Validator --> Evaluator[Clinical Reference Range Engine]
-    Evaluator --> UI[Interactive Diagnostic Dashboard]
-    UI --> PDF[PDF Diagnostic Exporter]
+    Input[ImageUploader / ValueInput] --> Parse[ExtractedValuesDisplay]
+    Parse --> Ref[src/data/labTests.ts Reference Intervals]
+    Ref --> Views[ResultDisplay / ComparisonView / TestHistoryView]
+    Views --> Export[PDFExport Summary]
 ```
-
----
-
-## Directory Structure
 
 ```text
 Lab-Clarity-Final/
+├── .github/workflows/quality.yml    # CI: npm ci, audit, typecheck, lint, test, build (PR #2)
 ├── src/
 │   ├── components/
-│   │   ├── CategorySelector.tsx     # Diagnostic panel selector
-│   │   ├── ComparisonView.tsx       # Historical biomarker comparison
-│   │   ├── DisclaimerBanner.tsx     # Clinical notice banner
-│   │   ├── ExtractedValuesDisplay.tsx # Biomarker indicator cards
-│   │   ├── ImageUploader.tsx        # Report image / document uploader
-│   │   ├── PDFExport.tsx            # Formatted PDF export generator
-│   │   └── ResultDisplay.tsx        # Diagnostic visual results shell
-│   ├── App.tsx                      # Main application view container
-│   └── main.tsx                     # React DOM mount point
-├── Dockerfile                       # Multi-stage production container build
-├── .dockerignore                    # Build optimization directives
-├── package.json                     # Dependencies and scripts
-└── README.md                        # Master repository technical documentation
+│   │   ├── CategorySelector.tsx
+│   │   ├── ComparisonView.tsx
+│   │   ├── DisclaimerBanner.tsx
+│   │   ├── ExtractedValuesDisplay.tsx
+│   │   ├── Header.tsx
+│   │   ├── ImageUploader.tsx
+│   │   ├── PDFExport.tsx
+│   │   ├── ResultDisplay.tsx
+│   │   ├── TestHistoryView.tsx
+│   │   ├── TestSelector.tsx
+│   │   ├── ThemeToggle.tsx
+│   │   ├── ValueInput.tsx
+│   │   └── ui/
+│   ├── data/
+│   │   ├── labTests.ts              # Biomarker catalog and reference ranges
+│   │   └── labTests.test.ts         # Vitest biomarker dataset & evaluation tests (PR #2)
+│   ├── hooks/                       # useTestHistory.tsx, useTheme.tsx, use-mobile.tsx, use-toast.ts
+│   ├── pages/                       # Index.tsx, NotFound.tsx
+│   └── App.tsx
+├── Dockerfile
+├── package.json
+└── README.md
 ```
 
 ---
 
-## Setup & Execution
+## Setup, Docker & Verification Scripts (`package.json`)
 
-### Local Development
 ```bash
-npm install
+git clone https://github.com/StratagemVX/Lab-Clarity-Final.git
+cd Lab-Clarity-Final
+
+npm ci --ignore-scripts
 npm run dev
 ```
 
-### Docker Production Deployment
+### Container Execution
 ```bash
 docker build -t lab-clarity .
 docker run -p 80:80 lab-clarity
 ```
+
+### Available Package Scripts
+| Script | Command | Notes |
+|---|---|---|
+| `npm run dev` | `vite` | Start Vite dev server |
+| `npm run build` | `vite build` | Production build |
+| `npm run typecheck` | `tsc --noEmit` | Added in PR #2 |
+| `npm run lint` | `eslint .` | ESLint checks |
+| `npm test` | `vitest run` | Added in PR #2 (`src/data/labTests.test.ts`) |
+| `npm run preview` | `vite preview` | Preview built output |
+
+*Educational tool only; not a certified clinical diagnostic device.*
 
 ---
 
 ## Contributor Attribution & Profile
 
 - **Lead Engineer:** Chethan Kumar B S (`StratagemVX`)
-- **Institution:** Department of Computer Science & Engineering, MVJ College of Engineering
+- **Related Bench Prototype:** [StratagemVX/lab-clarity](https://github.com/StratagemVX/lab-clarity)
 - **GitHub:** [https://github.com/StratagemVX](https://github.com/StratagemVX)
 - **Portfolio:** [https://chethan-kumar-portfolio.vercel.app/](https://chethan-kumar-portfolio.vercel.app/)
 - **LinkedIn:** [https://linkedin.com/in/chethan-kumar-b-s-781a002bb](https://linkedin.com/in/chethan-kumar-b-s-781a002bb)
-
-## Verification and maintenance
-
-Keep this README consistent with implemented behavior, current dependencies, and deployment configuration.
-
-### Available package scripts
-
-- `npm run dev` — `vite`
-- `npm run build` — `vite build`
-- `npm run lint` — `eslint .`
-- `npm run preview` — `vite preview`
-
-These commands are declared in the package manifest; no execution result is implied by listing them.
-
-### Contribution and security notes
-
-- Update feature, architecture, and screenshot material when implementation changes.
-- Keep credentials, private keys, production data, and local environment files out of version control.
-- Use placeholder-only configuration examples and store real secrets in deployment-managed settings.
-- Include reproducible issue steps and expected/actual results.
-- Run the relevant build, lint, and test checks before merging.
