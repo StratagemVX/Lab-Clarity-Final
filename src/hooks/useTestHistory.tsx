@@ -15,6 +15,13 @@ export interface TestRecord {
 
 const STORAGE_KEY = "labguide-test-history";
 
+export function createTestRecordId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `${Date.now()}`;
+}
+
 export const useTestHistory = () => {
   const [history, setHistory] = useState<TestRecord[]>([]);
 
@@ -37,7 +44,7 @@ export const useTestHistory = () => {
   const addRecord = (test: LabTest, value: number) => {
     const status = evaluateTestResult(value, test);
     const newRecord: TestRecord = {
-      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: createTestRecordId(),
       testName: test.name,
       value,
       unit: test.unit,
